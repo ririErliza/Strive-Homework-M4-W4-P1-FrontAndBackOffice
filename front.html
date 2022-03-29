@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <title>Front Part</title>
+  </head>
+  <body>
+    <h1>Hello</h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">CRUD Project</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="./front.html"
+                >Home <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./back.html">Backoffice</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+  
+      <h2 class="mt-4 text-center">List of Products</h2>
+  
+      <div class="container">
+        <div class="row justify-content-center mt-4">
+            <div class="col col-md-6">
+              <ul class="list-group" id="products-container"></ul>
+            </div>
+        
+        </div>
+      </div>
+
+  
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+
+
+    <script>
+    
+        const getData = async () => {
+        try {
+          let response = await fetch(
+            'https://striveschool-api.herokuapp.com/api/product/', {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQyZmRkYWRhMTNhZjAwMTUyYzFjNjEiLCJpYXQiOjE2NDg1NTc1MzAsImV4cCI6MTY0OTc2NzEzMH0.1fiNrhDESdvdEFh1zl2Bf25P8v-Ye92rEHztfRlg7b0',
+                }
+            }
+          )
+        
+          console.log(response)
+          if (response.ok) {
+            let data = await response.json()
+            console.log(data)
+            return data
+          } else {
+            console.log('something went wrong on the server')
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      }
+
+      const renderProductCards = (data) => {
+        let wrapper = document.getElementById('products-container')
+        data.forEach((product) => {
+     
+          const listItem = document.createElement('li')
+          listItem.className = 'list-group-item'
+          listItem.innerHTML = `<div class="card" style="width: 18rem;">
+                <img src="${product.image}" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">${product.name}e</h5>
+                  <p class="card-text">Description: ${product.description}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">${product.brand}</li>
+                  <li class="list-group-item">${product.price}</li>
+                </ul>
+               
+            </div> `
+        
+          wrapper.appendChild(listItem)
+        })
+      }
+
+      window.onload = async () => {
+        let data = await getData()
+        console.log("I'm in the onload block", data)
+        renderProductCards(data)
+      }
+    </script>
+  </body>
+</html>
