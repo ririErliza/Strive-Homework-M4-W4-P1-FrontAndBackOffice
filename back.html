@@ -46,7 +46,7 @@
       <div class="container">
         <div class="row justify-content-center mt-4">
           <div class="col col-md-6">
-            <form onsubmit="createNewEvent(event)">
+            <form onsubmit="createProduct(event)">
               <div class="form-group">
                 <label for="name-input">Product Name</label>
                 <input
@@ -93,7 +93,7 @@
                 />
               </div>
   
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary" >Submit</button>
             </form>
           </div>
         </div>
@@ -118,19 +118,11 @@
   ></script>
 
   <script>
-    const createProduct = async (data) => {
-      // we're going to fall here when we click the submit button! :)
-      // how do we send our event to the API for being generated on the db?
-      // remember: RESTful APIS are STATELESS. so this means we need to inform the APIs
-      // about our creation intentions, and we need to ATTACH to our request all the
-      // properties: name, description, price and time
+    const createProduct = async (event) => {
 
-      // first, let's retrieve the data OUT of the form (because we need those properties
-      // for our request)
 
-     data.preventDefault()
-      // preventDefault() STOPS the embedded browser behavior
-      // put this for preventing the browser from refreshing!
+     event.preventDefault()
+     
 
       const newProduct = {
         name: document.getElementById('name-input').value,
@@ -142,24 +134,20 @@
       }
 
       console.log(newProduct)
-      // now this works! myNewEvent is an object containing all the properties for
-      // creating a new event
 
-      // the next step will be: SEND IT to the API!
-
-      // I'll use the async/await pattern
+      // async/await
 
       try {
         const response = await fetch(
           'https://striveschool-api.herokuapp.com/api/product/',
           {
-            method: 'POST',
-            body: JSON.stringify(newProduct), // <-- we need to transform our event object
-            // into a string, because that's what is accepted from our APIs
+            method:'POST',
+            body: JSON.stringify(newProduct),
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQyZmRkYWRhMTNhZjAwMTUyYzFjNjEiLCJpYXQiOjE2NDg1NTc1MzAsImV4cCI6MTY0OTc2NzEzMH0.1fiNrhDESdvdEFh1zl2Bf25P8v-Ye92rEHztfRlg7b0',
-                'Content-Type': 'application/json',
-            },
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQyZmRkYWRhMTNhZjAwMTUyYzFjNjEiLCJpYXQiOjE2NDg1NzQ5MjYsImV4cCI6MTY0OTc4NDUyNn0.gOoRdCMQbZ6_QKql-UCo6mNN0_m0pGlGLb5mGyQ2iGY',
+                'Content-Type': 'application/json'
+            }
+          
            
           }
         )
