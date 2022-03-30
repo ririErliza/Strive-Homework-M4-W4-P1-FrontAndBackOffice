@@ -13,3 +13,128 @@
             </div> 
             
           </div>-->
+
+
+
+          onsubmit="createProduct(event)"
+
+
+
+          <form onsubmit="createProduct(event)">
+              <div class="form-group">
+                <label for="name-input">Product Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name-input"
+                  aria-describedby="name field"
+                />
+              </div>
+              <div class="form-group">
+                <label for="description-input">Description</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="description-input"
+                  aria-describedby="description field"
+                />
+              </div>
+              <div class="form-group">
+                <label for="description-input">Brand</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="brand-input"
+                  aria-describedby="brand field"
+                />
+              </div>
+              <div class="form-group">
+                <label for="description-input">Image url</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="image-input"
+                  aria-describedby="image field"
+                />
+              </div>
+              <div class="form-group">
+                <label for="price-input">Price</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="price-input"
+                  aria-describedby="price field"
+                />
+              </div>
+  
+              <button type="submit" class="btn btn-primary" >Submit</button>
+            </form>
+
+// backoffice
+ <script>
+      const createNewEvent = async (event) => {
+        // we're going to fall here when we click the submit button! :)
+        // how do we send our event to the API for being generated on the db?
+        // remember: RESTful APIS are STATELESS. so this means we need to inform the APIs
+        // about our creation intentions, and we need to ATTACH to our request all the
+        // properties: name, description, price and time
+
+        // first, let's retrieve the data OUT of the form (because we need those properties
+        // for our request)
+
+        event.preventDefault()
+        // preventDefault() STOPS the embedded browser behavior
+        // put this for preventing the browser from refreshing!
+
+        const myNewEvent = {
+          name: document.getElementById('name-input').value,
+          // .value is the text content of the selected input field
+          description: document.getElementById('description-input').value,
+          price: document.getElementById('price-input').value,
+          time: document.getElementById('time-input').value,
+        }
+
+        console.log(myNewEvent)
+        // now this works! myNewEvent is an object containing all the properties for
+        // creating a new event
+
+        // the next step will be: SEND IT to the API!
+
+        // I'll use the async/await pattern
+
+        try {
+          // the endpoint for POSTING data is the same we used for GETTING the data
+          const response = await fetch(
+            'https://striveschool-api.herokuapp.com/api/agenda/',
+            {
+              // configuration object goes here!
+              method: 'POST',
+              body: JSON.stringify(myNewEvent), // <-- we need to transform our event object
+              // into a string, because that's what is accepted from our APIs
+              headers: {
+                // headers are accessory information for you request
+                // they can pass custom attributes, they can hold an authorization permit
+                // Authorization: Bearer XXXXXXXXXXXXXXXXXX
+                // the Authorization header will be required for the homework
+                'Content-Type': 'application/json',
+              },
+              // 401 <-- Unauthorized
+            }
+          )
+          if (response.ok) {
+            // we successfully created a new event!! :D
+            alert('EVENT CREATED!')
+            // it would be handy here if I could reset the form...
+            document.getElementById('name-input').value = ''
+            document.getElementById('description-input').value = ''
+            document.getElementById('price-input').value = ''
+            document.getElementById('time-input').value = ''
+          } else {
+            // something went wrong with your event... :(
+            alert('WE GOT A PROBLEM!, TRY AGAIN!')
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    </script>
